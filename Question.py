@@ -20,7 +20,7 @@ def response():
         print(" ")
         print("you're mean, get what u deserve :/")
         print(" ")
-        time.sleep(10)
+        time.sleep(6)
         webbrowser.open(hot)
         
         
