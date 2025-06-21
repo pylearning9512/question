@@ -1,0 +1,42 @@
+name: Build Windows Executable
+
+# Trigger the workflow on push to main branch
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    
+    steps:
+    # Checkout the code
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    # Set up Python
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    
+    # Install dependencies
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pyinstaller
+        if (Test-Path requirements.txt) { pip install -r requirements.txt }
+    
+    # Build executable
+    - name: Build executable
+      run: |
+        pyinstaller --onefile --name Question Question.py
+    
+    # Upload the executable as artifact
+    - name: Upload executable
+      uses: actions/upload-artifact@v3
+      with:
+        name: windows-executable
+        path: dist/Question.exe
